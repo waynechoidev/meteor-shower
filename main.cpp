@@ -39,10 +39,13 @@ int main()
 
 	Program bgProgram = Program();
 	bgProgram.createFromFiles("bg.vert","bg.frag");
-	
-	// Texture
-	Texture bgTexture = Texture();
-	bgTexture.initialise("textures/stars.jpg");
+	GLuint zIndexLoc = glGetUniformLocation(bgProgram.getID(), "zIndex");
+
+	// BG Textures
+	Texture bgTextureFront = Texture();
+	bgTextureFront.initialise("textures/front.png");
+	Texture bgTextureBack = Texture();
+	bgTextureBack.initialise("textures/back.png");
 
 	// Create vertices
 	GLfloat expansionRatio = 1.2f;
@@ -179,11 +182,18 @@ int main()
 
 		// BG
 		bgProgram.use();
-		bgTexture.use();
-
 		glBindVertexArray(bgVAO);
+
+		bgTextureFront.use();
+		glUniform1f(zIndexLoc, -1.0);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+		bgTextureBack.use();
+		glUniform1f(zIndexLoc, 0.1);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
 		glBindVertexArray(0);
+
 
 		// Compute position
 		computeProgram.use();

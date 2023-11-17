@@ -10,4 +10,7 @@ void main()
 {
 	color = texture(theTexture, TexCoords);
 	//color = vec4(1.0);
+	if (dot(color.rgb, vec3(1.0)) - 0.1 < 0.0) {
+    discard;
+    }
 }
